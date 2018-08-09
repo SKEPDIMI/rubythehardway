@@ -18,15 +18,14 @@ module Engine
     last_scene = @map.locations('_FINISH')
 
     while current_location != last_scene
-      next_location_id = current_location.enter # Current scene will return the next scene once the player finishes it
-      current_location = @map.locations(next_location_id) # Play the next scene
-      puts current_location.id || 'OOPS'
+      next_location_id = current_location.enter() || '_FINISH' # Enter the current location, which will return the next scene's ID WHEN the player finishes the given scene
+      current_location = @map.locations(next_location_id) # Current location is now the location that goes after the completed location
     end
 
     current_location.enter()
   end
   def play
-    prompt """
+    messenger.prompt """
       ### EPIQUEST 64 ###
       ~~~~~~~~~~~~~~~~~~~
       
@@ -34,9 +33,10 @@ module Engine
       > PRESS ENTER TO BEGIN
     """
 
-    messenger.display('Welcome to Epiquest.')
+    messenger.display("Welcome to Epiquest.")
 
-    name = messenger.prompt("Welcome to Epiquest. \n# What is your name, traveller?")
+    name = messenger.prompt("What is your name, traveller?")
+    
     @user_data = User_model.new(name)
 
     messenger.display("An honor to meet you, #{@user_data.name}");
