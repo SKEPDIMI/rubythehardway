@@ -10,4 +10,6 @@ module User
   def name
     @name.capitalize
   end
+
+  attr_accessor :name, :gold, :fishing_rod_health, :experience, :level
 end
