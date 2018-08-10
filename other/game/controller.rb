@@ -28,16 +28,16 @@ module Controller
   def timeOfDay
     time = @data['time']
     case
-    when time <= 0 && time <= 5 # 12AM - 5AM
+    when time >= 23 && time <= 1 # 10PM - 1AM
       return 'midnight'
-    when time >= 5 && time <= 11 # 5AM - 11AM
+    when time >= 1 && time <= 11 # 1AM - 11AM
       return 'morning'
     when time >= 11 && time <= 13 # 11AM - 1PM
       return 'midday'
     when time >= 13 && time <= 18 # 1PM - 6PM
       return 'afternoon'
-    when time >= 18 && time <= 0 # 6PM - 12AM
-      return 'evening'
+    when time >= 18 && time <= 23 # 6PM - 10PM
+      return 'night'
     end
   end
 end
