@@ -17,7 +17,7 @@ module Engine
   end
   def play
     @console.prompt """
-      _____ ______  _____  _____  _   _  _____  _____  _____             ____    ___ 
+       _____  _____   _____  _____  _   _  _____  _____  _____             ____    ___ 
       |  ___|| ___ \\|_   _||  _  || | | ||  ___|/  ___||_   _|           / ___|  /   |
       | |__  | |_/ /  | |  | | | || | | || |__  \\ `--.   | |    ______  / /___  / /| |
       |  __| |  __/   | |  | | | || | | ||  __|  `--. \\  | |   |______| | ___ \\/ /_| |
@@ -49,16 +49,10 @@ module Engine
 
     # THIS IS THE MAIN GAME LOOP
     while current_location != last_scene
-      started_time = Time.now
-
       next_location_id = current_location.enter() || '_FINISH' # Enter the current location, which will return the next scene's ID WHEN the player finishes the given scene
       current_location = @map.locations(next_location_id) # Current location is now the location that goes after the completed location
       
       @console.clearScreen()
-
-      @controller.addTime(Time.now - started_time)
-      
-      puts "#{@controller.getTimeOfDay} (#{@controller.get('time')})"
     end
 
     current_location.enter()

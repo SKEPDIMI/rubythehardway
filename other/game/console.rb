@@ -1,6 +1,12 @@
 module Console
   def initialize(controller)
     @controller = controller
+    @start_time = false
+  end
+
+  def finish_time
+    @controller.addTime(Time.now - @start_time)
+    @start_time = false
   end
 
   def log(message)
@@ -8,13 +14,14 @@ module Console
   end
   
   def get_input() # Gets input from the user, or checks and runs commands
+    @start_time ||= Time.now
     print "> "
     response = $stdin.gets.chomp.downcase
 
     if response[0] === '#' # This will detect commands from the user
       stripped = response.gsub(/\s+/, "")
       if (stripped === '#time')
-        log "Time is #{@controller.getTimeOfDay} (#{@controller.get('time')})"
+        log "Time is #{@controller.timeOfDay} (#{@controller.get('time')})"
       elsif (stripped == "#get")
         # Find arguments and return data
         user = @controller.get('user')
@@ -47,9 +54,12 @@ module Console
       else
         log "Unknown command: #{stripped}"
       end
+      
+      finish_time()
       return get_input()
     end
 
+    finish_time()
     return response
   end
 
