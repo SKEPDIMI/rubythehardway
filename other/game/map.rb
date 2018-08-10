@@ -1,4 +1,7 @@
 require_relative 'console'
+require_relative 'locations/start'
+require_relative 'locations/city'
+require_relative 'locations/beach'
 
 class Console_model
   include Console
@@ -25,100 +28,23 @@ class Location
 end
 
 class Start < Location
-  def enter()
-    timeOfDay = @controller.timeOfDay
-    day = @controller.get('day')
-
-    if timeOfDay == 'morning' && day == 0
-      puts "You feel the soft breeze easing through your face"
-      puts "As you begin to open your eyes, rays of sunlight overwhelm you"
-      puts "It takes your eyes a second to adjust to the bright, sunny and light sky overhead you"
-      @console.print_format("\nIt was all a dream after all.\n", 'italic')
-      puts "You lie under the shade of a tree, where you must haven falled asleep a long time ago"
-      puts "With your body now rejuvinated, you take a deep breath before sitting upright from your laying position"
-      puts "You are then met with a familiar landscape, of fields far beyond the eye can see, mountains raging in the far lands"
-      puts "And then you see it, standing as tall as ever, The greatest city to have ever been built"
-      puts "THE KINGDOM OF EPIQUORIA - 700 B.C."
-    else day == 1
-      puts "You lie under the same shade without a care in the world, free of the worries of the world"
-    end
-
-    response = @console.prompt("What would you like to do now?", ["Sleep some more", "Head to the city"]);
-
-    if response == 1
-      case
-      when timeOfDay == 'morning' || timeOfDay == 'midday'
-        @console.prompt("You close your eyes and head back to sleep again...")
-        @controller.addTime(14400) #4 hours
-      when timeOfDay == 'afternoon'
-        @console.prompt("Seeing it's getting late you head back to sleep again...")
-        @controller.addTime(7200) #2 hours
-      when timeOfDay == 'evening'
-        @console.prompt("It's getting dark, but you still head back to sleep")
-        @controller.addTime(3600) #1 hour
-      when timeOfDay == 'night'
-        @console.prompt("Seeing its dark you still head back to sleep")
-        @controller.addTime(1800) #30 min
-      end
-      return '_START'
-    elsif response == 2
-      @console.display('As you approach the walls of the city, you are greeted by guards at the entrance')
-      @console.prompt('You enter through the gates of the city')
-
-      return '_CITY'
-    end
-  end
-
-  def id
-    return '_START'
-  end
+  include Start_model
 end
 
 class City < Location
-  def enter
-    timeOfDay = @controller.timeOfDay
-    puts "You arrive at the city entrance"
-    
-    response = @console.prompt('What do you do now?', ['Leave to the beach', 'Go to the market', 'Explore'])
-    if response == 1
-      return '_BEACH'
-    elsif response == 2
-      return '_CITY_MARKET'
-    elsif response == 3
-      return '_CITY_EXPLORE'
-    end
-
-    return '_FINISH'
-  end
-
-  def id
-    return '_CITY'
-  end
+  include City_model
 end
 
 class CityMarket < Location
-  def enter
-    timeOfDay = @controller.timeOfDay
-    puts 'We arrive to the market.'
+  include CityMarket_model
+end
 
-    if timeOfDay == 'night'
-      puts "NOTICE: Market is close during the night"
-      response = @console.prompt("What do you do now?", ["Head back to city entrance"])
-      return '_CITY'
-    else
-      puts "The city market, packed as always."
-      response = @console.prompt("What do you do now?", ["Visit fishing shop", "Leave back to city entrance"])
-      if response == 1
-        return '_CITY_MARKET_FISHING'
-      elsif response == 2
-        return '_CITY'
-      end
-    end
-  end
+class Beach < Location
+  include Beach_model
+end
 
-  def id
-    return '_CITY_MARKET'
-  end
+class BeachFish < Location
+  include BeachFish_model
 end
 
 class Finish < Location
@@ -130,38 +56,6 @@ class Finish < Location
   def id
     return '_FINISH'
   end
-end
-
-class Beach < Location
-  def enter
-    puts "You arrive at the beach"
-    response = @console.prompt("What do you do?", ["Fish", "Head to docks", "Go to city"]);
-
-    if response == 1
-      return "_BEACH_FISH"
-    elsif response == 2
-      return "_BEACH_DOCKS"
-    elsif response == 3
-      return "_CITY"
-    end
-  end
-  def id
-    return '_BEACH'
-  end
-end
-
-class BeachFish < Location
-  def enter
-    puts "You sit by the hedge of a small rock cliff by the water"
-    user = @controller.get('user')
-
-    if user.fishing_rod_health <= 0
-      puts "You swing your fishing rod out into the water only to have it snap in half"
-    else
-      puts "You begin fishing"
-    end
-  end
-
 end
 
 module Map

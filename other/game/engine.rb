@@ -1,4 +1,4 @@
-require_relative 'user'
+require_relative 'models/user'
 require_relative 'console'
 
 class User_model
