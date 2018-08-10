@@ -4,21 +4,48 @@ module Console
   end
 
   def log(message)
-    print("\n")
-    print("log >> #{message.upcase}")
-    print("\n")
+    puts("log >> #{message.upcase}")
   end
   
-  def get_input()
+  def get_input() # Gets input from the user, or checks and runs commands
     print "> "
     response = $stdin.gets.chomp.downcase
 
     if response[0] === '#' # This will detect commands from the user
       stripped = response.gsub(/\s+/, "")
       if (stripped === '#time')
-        puts "Time is #{@controller.getTimeOfDay} (#{@controller.get('time')})"
-      elsif (stripped[0,3] "#get")
+        log "Time is #{@controller.getTimeOfDay} (#{@controller.get('time')})"
+      elsif (stripped == "#get")
         # Find arguments and return data
+        user = @controller.get('user')
+        if user == nil 
+          log "No user has been initialized"
+        else
+          log """
+          NAME: #{user.name}
+          GOLD: #{user.gold}
+          FISHING_ROD_HEALTH: #{user.fishing_rod_health}
+          XP: #{user.xp}
+          LEVEL: #{user.level}
+          """
+        end
+      elsif stripped[0..7] == '#settime'
+        arg = stripped.gsub('#settime', '')
+        if arg == ''
+          log "No argument provided"
+        else
+          time = arg.to_i
+          if time > 24 || time < 0
+            log "Time must be between 0 and 24"
+          else
+            @controller.set('time', time)
+            log "Set time to #{time}"
+          end
+        end
+      elsif stripped == '#exit'
+        exit(0)
+      else
+        log "Unknown command: #{stripped}"
       end
       return get_input()
     end

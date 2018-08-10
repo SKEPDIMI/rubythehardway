@@ -27,7 +27,7 @@ module Engine
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       > Made by SKEPDIMI                           
       > Please play in fullscreen
-      > Exit: Ctrl-C
+      > To exit type \"\#exit\" in prompt
       > Begin: RETURN                                             
     """
 
