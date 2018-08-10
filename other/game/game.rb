@@ -18,7 +18,8 @@ end
 
 controller = Controller_model.new({
   'user' => nil,
-  'time' => 12
+  'time' => 12.0,
+  'day' => 0
 });
 
 engine = Game_Engine.new(controller)
