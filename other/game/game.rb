@@ -18,7 +18,7 @@ end
 
 controller = Controller_model.new({
   'user' => nil,
-  'time' => 12.0,
+  'time' => 7,
   'day' => 0
 });
 
