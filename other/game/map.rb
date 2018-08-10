@@ -62,9 +62,10 @@ class Start < Location
       end
       return '_START'
     elsif response == 2
+      @console.display('As you approach the walls of the city, you are greeted by guards at the entrance')
+      @console.prompt('You enter through the gates of the city')
+
       return '_CITY'
-    else
-      puts ">????>"
     end
   end
 
@@ -75,15 +76,48 @@ end
 
 class City < Location
   def enter
-    @console.display('As you approach the walls of the city, you are greeted by guards at the entrance')
-    @console.display('You enter through the gates of the city')
+    timeOfDay = @controller.timeOfDay
+    puts "You arrive at the city entrance"
+    
     response = @console.prompt('What do you do now?', ['Leave to the beach', 'Go to the market', 'Explore'])
+    if response == 1
+      return '_BEACH'
+    elsif response == 2
+      return '_CITY_MARKET'
+    elsif response == 3
+      return '_CITY_EXPLORE'
+    end
 
     return '_FINISH'
   end
 
   def id
     return '_CITY'
+  end
+end
+
+class CityMarket < Location
+  def enter
+    timeOfDay = @controller.timeOfDay
+    puts 'We arrive to the market.'
+
+    if timeOfDay == 'night'
+      puts "NOTICE: Market is close during the night"
+      response = @console.prompt("What do you do now?", ["Head back to city entrance"])
+      return '_CITY'
+    else
+      puts "The city market, packed as always."
+      response = @console.prompt("What do you do now?", ["Visit fishing shop", "Leave back to city entrance"])
+      if response == 1
+        return '_CITY_MARKET_FISHING'
+      elsif response == 2
+        return '_CITY'
+      end
+    end
+  end
+
+  def id
+    return '_CITY_MARKET'
   end
 end
 
@@ -98,6 +132,38 @@ class Finish < Location
   end
 end
 
+class Beach < Location
+  def enter
+    puts "You arrive at the beach"
+    response = @console.prompt("What do you do?", ["Fish", "Head to docks", "Go to city"]);
+
+    if response == 1
+      return "_BEACH_FISH"
+    elsif response == 2
+      return "_BEACH_DOCKS"
+    elsif response == 3
+      return "_CITY"
+    end
+  end
+  def id
+    return '_BEACH'
+  end
+end
+
+class BeachFish < Location
+  def enter
+    puts "You sit by the hedge of a small rock cliff by the water"
+    user = @controller.get('user')
+
+    if user.fishing_rod_health <= 0
+      puts "You swing your fishing rod out into the water only to have it snap in half"
+    else
+      puts "You begin fishing"
+    end
+  end
+
+end
+
 module Map
   ## MAP MODULE
   # The map will contain a hash, making it possible to access locations from the engine
@@ -109,6 +175,8 @@ module Map
     @@locations = {
       '_START' => Start.new(controller),
       '_CITY' => City.new(controller),
+        '_CITY_MARKET' => CityMarket.new(controller),
+      '_BEACH' => Beach.new(controller),
       '_FINISH' => Finish.new(controller)
     }
   end
