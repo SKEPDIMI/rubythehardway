@@ -1,15 +1,35 @@
-module Messenger
+module Console
+  def initialize(controller)
+    @controller = controller
+  end
+
   def log(message)
     print("\n")
     print("log >> #{message.upcase}")
     print("\n")
   end
   
-  def clearScreen
-    log "DONE"
-    print "\e[2J\e[f"
-    system "clear"
+  def get_input()
+    print "> "
+    response = $stdin.gets.chomp.downcase
+
+    if response[0] === '#' # This will detect commands from the user
+      stripped = response.gsub(/\s+/, "")
+      if (stripped === '#time')
+        puts "Time is #{@controller.getTimeOfDay} (#{@controller.get('time')})"
+      elsif (stripped[0,3] "#get")
+        # Find arguments and return data
+      end
+      return get_input()
+    end
+
+    return response
   end
+
+  def clearScreen
+    puts %x{clear}
+  end
+
   def print_format(message, format = false)
     case true
     when format == false
@@ -31,12 +51,11 @@ module Messenger
     print_format("\n# #{message}\n", 'red')
 
     if options # Make sure the user's option is valid
-      options.each do |option| # Print all of the options for the user
+      options.each do |option| # timeall of the options for the user
         puts "* #{option}"
       end
   
-      print("> ")
-      response = $stdin.gets.chomp.downcase
+      response = get_input()
   
       options.each_with_index do |option, i|
         if option.downcase.include? response
@@ -49,7 +68,7 @@ module Messenger
       print_format("I'm not sure what that means", 'italic')
       prompt(message, options)
     else
-      return $stdin.gets.chomp.downcase || ''
+      return get_input()
     end
   end
 end

@@ -1,7 +1,7 @@
-require_relative 'messenger'
+require_relative 'console'
 
-class Messenger_model
-  include Messenger
+class Console_model
+  include Console
 end
 
 class Location
@@ -10,34 +10,36 @@ class Location
   # When entered, we can expect the location to return the id of another location
   # All location values are unique
 
-  def initialize
-    @messenger = Messenger_model.new
+  def initialize(controller)
+    @controller = controller
+    @console = Console_model.new(controller)
   end
   def enter
-    puts "Not yet configured scene"
+    puts "THIS LOCATION's ENTER METHOD HAS NOT BEEN CONFIGURED YET"
+    exit(1)
+  end
+  def id
+    puts "THIS LOCATION's ID HAS NOT BEEN CONFIGURED YET"
     exit(1)
   end
 end
 
 class Start < Location
-  @name = 'Fields'
-
   def enter()
-    puts"You feel the soft breeze easing through your face"
+    
+    puts "You feel the soft breeze easing through your face"
     puts "As you begin to open your eyes, rays of sunlight overwhelm you"
     puts "It takes your eyes a second to adjust to the bright, sunny and light sky overhead you"
-    @messenger.print_format("\nIt was all a dream after all.\n", 'italic')
+    @console.print_format("\nIt was all a dream after all.\n", 'italic')
     puts "You lie under the shade of a tree, where you must haven falled asleep a long time ago"
     puts "With your body now rejuvinated, you take a deep breath before sitting upright from your laying position"
     puts "You are then met with a familiar landscape, of fields far beyond the eye can see, mountains raging in the far lands"
     puts "And then you see it, standing as tall as ever, The greatest city to have ever been built"
     puts "THE KINGDOM OF EPIQUORIA - 700 B.C."
     
-    response = @messenger.prompt("What would you like to do now?", ["Sleep some more", "Head to the city"]);
+    response = @console.prompt("What would you like to do now?", ["Sleep some more", "Head to the city"]);
 
     if response == 1
-      puts "You head back to sleep."
-      @messenger.clearScreen()
       return '_START'
     elsif response == 2
       return '_CITY'
@@ -51,10 +53,9 @@ end
 
 class City < Location
   def enter
-    @messenger.clearScreen()
-    @messenger.display('As you approach the walls of the city, you are greeted by guards at the entrance')
-    @messenger.display('You enter through the gates of the city')
-    response = @messenger.prompt('What do you do now?', ['Leave to the beach', 'Go to the market', 'Explore'])
+    @console.display('As you approach the walls of the city, you are greeted by guards at the entrance')
+    @console.display('You enter through the gates of the city')
+    response = @console.prompt('What do you do now?', ['Leave to the beach', 'Go to the market', 'Explore'])
 
     return '_FINISH'
   end
@@ -66,7 +67,7 @@ end
 
 class Finish < Location
   def enter()
-    @messenger.display("Game ends here")
+    @console.display("Game ends here")
     exit(0)
   end
 
@@ -82,11 +83,14 @@ module Map
   # map.enter('_START') # Will call the .enter method of a location
   # map.locations('_START') # will return an instance of the Start location
 
-  @@locations = {
-    '_START' => Start.new,
-    '_CITY' => City.new,
-    '_FINISH' => Finish.new
-  }
+  def initialize(controller)
+    @@locations = {
+      '_START' => Start.new(controller),
+      '_CITY' => City.new(controller),
+      '_FINISH' => Finish.new(controller)
+    }
+  end
+
   def enter(id)
     @@locations[id].enter
   end
