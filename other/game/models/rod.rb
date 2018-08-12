@@ -8,8 +8,8 @@ module FishingRod_model
   def initialize(controller)
     @controller = controller
     @func = Func.new
-    @health = 10
-    @power = 5
+    @health = 27
+    @power = 1
     @bait = nil
   end
 
@@ -59,6 +59,8 @@ module FishingRod_model
       sleep 4
     end
 
+
+    @health -= rand(0..4)
     return selected
   end
 
