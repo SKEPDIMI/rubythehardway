@@ -105,5 +105,44 @@
       "time": "midday"
     },
     "price": 5000
+  },
+  "a11": {
+    "type": "fish",
+    "name": "Novenopus",
+    "rarity": 4,
+    "description": "An octopus with 9 tentacles..?",
+    "requirements": {
+      "power": 3,
+      "time": "afternoon"
+    },
+    "price": 2500
+  },
+  "a12": {
+    "type": "fish",
+    "name": "Nautilus",
+    "rarity": 3,
+    "description": "A fallen creature ascendant from the void",
+    "requirements": {
+      "time": "night midnight"
+    },
+    "price": 50
+  },
+  "a13": {
+    "type": "fish",
+    "name": "Walking fish",
+    "rarity": 4,
+    "description": "A fish with legs!",
+    "requirements": {
+      "power": 4
+    },
+    "price": 1050
+  },
+  "a14": {
+    "type": "fish",
+    "name": "Sponge",
+    "rarity": 4,
+    "description": "Squish",
+    "requirements": null,
+    "price": 500
   }
 }
