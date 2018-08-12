@@ -1,9 +1,19 @@
+require_relative 'rod'
+
+class FishingRod
+  include FishingRod_model
+end
+
 module User
-  def initialize(name = 'adventurer')
+  def initialize(controller, name = 'adventurer')
     @name = name
-    @gold = 0
-    @fishing_rod_health = 100
-    @experience = 0
+    @money = 0
+    @fishing_rod = FishingRod.new(controller)
+    @inventory = [ # FOR TESTING ONLY. THIS SHOULD BE EMPTY
+      {'_ref' => 'fishing_loot', '_id' => "a8"},
+      {'_ref' => 'fishing_loot', '_id' => "a5"}
+    ]
+    @xp = 0
     @level = 0
   end
 
@@ -11,5 +21,5 @@ module User
     @name.capitalize
   end
 
-  attr_accessor :name, :gold, :fishing_rod_health, :experience, :level
+  attr_accessor :name, :money, :fishing_rod, :xp, :level, :inventory
 end

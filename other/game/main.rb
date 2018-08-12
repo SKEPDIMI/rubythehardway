@@ -1,14 +1,12 @@
+require 'whirly'
+
 require_relative 'engine'
-require_relative 'map'
 require_relative 'controller'
 
-class Game_Map
-  include Map
-end
 class Game_Engine
   include Engine
 end
-class Controller_model
+class Game_Controller
   include Controller
 end
 
@@ -16,7 +14,7 @@ end
 # Controllers get/set the game_data for all Modules
 # It is sort of like a centralized store
 
-controller = Controller_model.new({
+controller = Game_Controller.new({
   'user' => nil,
   'time' => 7,
   'day' => 0
